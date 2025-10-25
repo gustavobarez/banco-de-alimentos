@@ -1,39 +1,138 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { DonationsService } from './donations.service';
-import type { InferInsertModel } from 'drizzle-orm';
-import { donations } from 'src/db/schema';
+import { CreateDonationDto } from './dto/create-donation.dto';
 
+@ApiTags('doações')
 @Controller('donations')
 export class DonationsController {
   constructor(private readonly donationsService: DonationsService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Listar todas as doações' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Lista de todas as doações cadastradas',
+    type: [CreateDonationDto],
+  })
+  @HttpCode(HttpStatus.OK)
   async findAll() {
-    return this.donationsService.findAll();
+    return await this.donationsService.findAll();
   }
 
   @Get('donor/:id')
-  async findByDonor(@Param('id') id: number) {
-    return this.donationsService.findByDonor(Number(id));
+  @ApiOperation({ summary: 'Buscar doações por doador' })
+  @ApiParam({
+    name: 'id',
+    description: 'ID do doador',
+    type: 'number',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Lista de doações do doador',
+    type: [CreateDonationDto],
+  })
+  @HttpCode(HttpStatus.OK)
+  async findByDonor(@Param('id', ParseIntPipe) id: number) {
+    return await this.donationsService.findByDonor(id);
   }
 
   @Get('institution/:id')
-  async findByInstitution(@Param('id') id: number) {
-    return this.donationsService.findByInstitution(Number(id));
+  @ApiOperation({ summary: 'Buscar doações por instituição' })
+  @ApiParam({
+    name: 'id',
+    description: 'ID da instituição',
+    type: 'number',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Lista de doações da instituição',
+    type: [CreateDonationDto],
+  })
+  @HttpCode(HttpStatus.OK)
+  async findByInstitution(@Param('id', ParseIntPipe) id: number) {
+    return await this.donationsService.findByInstitution(id);
   }
 
   @Post()
-  async create(@Body() donationData: InferInsertModel<typeof donations>) {
-    return this.donationsService.create(donationData);
+  @ApiOperation({ summary: 'Criar uma nova doação' })
+  @ApiBody({ type: CreateDonationDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Doação criada com sucesso',
+    type: CreateDonationDto,
+  })
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() donationData: CreateDonationDto) {
+    return await this.donationsService.create({
+      ...donationData,
+      quantity: donationData.quantity.toString(),
+    });
   }
 
   @Patch(':id')
-  async updateStatus(@Param('id') id: number, @Body('status') status: string) {
-    return this.donationsService.updateStatus(Number(id), status);
+  @ApiOperation({ summary: 'Atualizar status de uma doação' })
+  @ApiParam({
+    name: 'id',
+    description: 'ID da doação',
+    type: 'number',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'string',
+          example: 'aprovado',
+          description: 'Novo status da doação',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Status da doação atualizado com sucesso',
+    type: CreateDonationDto,
+  })
+  @HttpCode(HttpStatus.OK)
+  async updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status') status: string,
+  ) {
+    return await this.donationsService.updateStatus(id, status);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
-    return this.donationsService.delete(Number(id));
+  @ApiOperation({ summary: 'Excluir uma doação' })
+  @ApiParam({
+    name: 'id',
+    description: 'ID da doação',
+    type: 'number',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Doação excluída com sucesso',
+    type: CreateDonationDto,
+  })
+  @HttpCode(HttpStatus.OK)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.donationsService.delete(id);
   }
 }
