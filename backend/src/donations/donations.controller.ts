@@ -20,10 +20,10 @@ import {
 import { DonationsService } from './donations.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
 
-@ApiTags('doações')
+@ApiTags('doacoes')
 @Controller('donations')
 export class DonationsController {
-  constructor(private readonly donationsService: DonationsService) {}
+  constructor(private readonly donationsService: DonationsService) { }
 
   @Get()
   @ApiOperation({ summary: 'Listar todas as doações' })
@@ -81,11 +81,9 @@ export class DonationsController {
   })
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() donationData: CreateDonationDto) {
-    return await this.donationsService.create({
-      ...donationData,
-      quantity: donationData.quantity.toString(),
-    });
+    return await this.donationsService.create(donationData);
   }
+
 
   @Patch(':id')
   @ApiOperation({ summary: 'Atualizar status de uma doação' })
