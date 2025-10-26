@@ -9,22 +9,6 @@ import { Instituicoes } from './components/Instituicoes';
 import { Estoque } from './components/Estoque';
 import { Historico } from './components/Historico';
 
-interface Doador {
-  id: string;
-  nome: string;
-  tipo: 'PF' | 'PJ';
-  telefone: string;
-  email: string;
-}
-
-interface Instituicao {
-  id: string;
-  nome: string;
-  endereco: string;
-  capacidade: number;
-  limiteMensal: number;
-}
-
 interface Produto {
   id: string;
   nome: string;
@@ -56,45 +40,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('');
 
-  console.log("Login renderizado");
-  console.log("isAuthenticated:", isAuthenticated);
-
-
-
-  // Estado dos dados
-  const [doadores, setDoadores] = useState<Doador[]>([
-    {
-      id: '1',
-      nome: 'Maria Silva',
-      tipo: 'PF',
-      telefone: '(11) 98765-4321',
-      email: 'maria@email.com',
-    },
-    {
-      id: '2',
-      nome: 'Supermercado Bom Preço',
-      tipo: 'PJ',
-      telefone: '(11) 3456-7890',
-      email: 'contato@bompreco.com',
-    },
-  ]);
-
-  const [instituicoes, setInstituicoes] = useState<Instituicao[]>([
-    {
-      id: '1',
-      nome: 'Casa de Apoio São Francisco',
-      endereco: 'Rua das Flores, 123 - Centro',
-      capacidade: 500,
-      limiteMensal: 2000,
-    },
-    {
-      id: '2',
-      nome: 'Instituto Esperança',
-      endereco: 'Av. Principal, 456 - Jardim América',
-      capacidade: 800,
-      limiteMensal: 3000,
-    },
-  ]);
+  // Estado dos dados (doadores e instituições agora vêm da API)
 
   const [produtos, setProdutos] = useState<Produto[]>([
     {
@@ -168,9 +114,6 @@ function App() {
   ]);
 
   const handleLogin = (email: string, password: string) => {
-    console.log("isAuthenticated:", isAuthenticated);
-
-    // Simulação de login
     setIsAuthenticated(true);
     setUserName(email.split('@')[0]);
   };
@@ -180,21 +123,7 @@ function App() {
     setUserName('');
   };
 
-  const handleAddDoador = (doador: Omit<Doador, 'id'>) => {
-    const newDoador = {
-      ...doador,
-      id: Date.now().toString(),
-    };
-    setDoadores([...doadores, newDoador]);
-  };
 
-  const handleAddInstituicao = (instituicao: Omit<Instituicao, 'id'>) => {
-    const newInstituicao = {
-      ...instituicao,
-      id: Date.now().toString(),
-    };
-    setInstituicoes([...instituicoes, newInstituicao]);
-  };
 
   const handleAddProduto = (produto: Omit<Produto, 'id'>) => {
     const newProduto = {
@@ -219,24 +148,15 @@ function App() {
     data: mov.data,
   }));
 
+  // Stats serão carregados dinamicamente das APIs
   const stats = {
-    totalDoadores: doadores.length,
-    totalInstituicoes: instituicoes.length,
+    totalDoadores: 0, // TODO: Buscar da API
+    totalInstituicoes: 0, // TODO: Buscar da API
     produtosEstoque: produtos.reduce((acc, p) => acc + p.quantidade, 0),
     ultimasMovimentacoes: movimentacoes.length,
   };
 
-  if (!isAuthenticated) {
-    return (
-      <>
-        <Login onLogin={handleLogin} />
-        <Toaster />
-      </>
-    );
-  }
-
   return (
-    
     <Router>
       {!isAuthenticated ? (
         <>
@@ -253,16 +173,11 @@ function App() {
             />
             <Route
               path="/doadores"
-              element={<Doadores doadores={doadores} onAddDoador={handleAddDoador} />}
+              element={<Doadores />}
             />
             <Route
               path="/instituicoes"
-              element={
-                <Instituicoes
-                  instituicoes={instituicoes}
-                  onAddInstituicao={handleAddInstituicao}
-                />
-              }
+              element={<Instituicoes />}
             />
             <Route
               path="/estoque"
