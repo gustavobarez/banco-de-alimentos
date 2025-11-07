@@ -9,7 +9,7 @@ import * as schema from './schema';
 
 const connectionString =
   process.env.DATABASE_URL ||
-  'postgresql://user:password@localhost:5432/food_bank';
+  'postgresql://postgres:postgres@localhost:5432/food_bank';
 
 const client = postgres(connectionString);
 export const db = drizzle(client, { schema });
