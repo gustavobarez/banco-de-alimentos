@@ -1,8 +1,6 @@
-# Use postgres/example user/password credentials
-
 services:
   db:
-    image: postgres
+    image: postgres:18
     restart: always
     shm_size: 128mb
     environment:
@@ -12,7 +10,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # Novo caminho compatível com Postgres 18+
+      - postgres_data:/var/lib/postgresql
 
 volumes:
   postgres_data:
