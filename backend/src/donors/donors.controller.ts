@@ -2,7 +2,6 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DonorsService } from './donors.service';
 import { CreateDonorDto } from './dto/create-donor.dto';
-import { UpdateDonorDto } from './dto/update-donor.dto';
 
 @ApiTags('doadores')
 @Controller('donors')
@@ -33,9 +32,8 @@ export class DonorsController {
     return this.donorService.create(donor);
   }
 
-
-    @Put(':id')
-    async update(@Param('id') id: string, @Body() body: any) {
-        return this.donorService.update(Number(id), body);
-    }
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: any) {
+    return this.donorService.update(Number(id), body);
+  }
 }

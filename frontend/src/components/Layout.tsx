@@ -1,6 +1,16 @@
-import React from 'react';
-import { LayoutDashboard, Users, Building2, Package, History, LogOut, Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import {
+  Building2,
+  Gift,
+  History,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Package,
+  Users,
+  X,
+} from "lucide-react";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,16 +18,21 @@ interface LayoutProps {
   onLogout?: () => void;
 }
 
-export function Layout({ children, userName = 'Usuário', onLogout }: LayoutProps) {
+export function Layout({
+  children,
+  userName = "Usuário",
+  onLogout,
+}: LayoutProps) {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-    { icon: Users, label: 'Doadores', path: '/doadores' },
-    { icon: Building2, label: 'Instituições', path: '/instituicoes' },
-    { icon: Package, label: 'Estoque', path: '/estoque' },
-    { icon: History, label: 'Histórico', path: '/historico' },
+    { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+    { icon: Users, label: "Doadores", path: "/doadores" },
+    { icon: Building2, label: "Instituições", path: "/instituicoes" },
+    { icon: Gift, label: "Doações", path: "/doacoes" },
+    { icon: Package, label: "Estoque", path: "/estoque" },
+    { icon: History, label: "Histórico", path: "/historico" },
   ];
 
   const closeSidebar = () => setIsSidebarOpen(false);
@@ -26,16 +41,13 @@ export function Layout({ children, userName = 'Usuário', onLogout }: LayoutProp
     <div className="flex min-h-screen bg-[#F5F5F5]">
       {/* Overlay para mobile */}
       {isSidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 lg:hidden"
-          onClick={closeSidebar}
-        />
+        <div className="fixed inset-0 z-40 lg:hidden" onClick={closeSidebar} />
       )}
 
       {/* Sidebar */}
       <aside
         className={`w-64 bg-white shadow-md fixed h-full z-50 transition-transform duration-300 lg:translate-x-0 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="p-6 border-b border-gray-200 flex items-center justify-between">
@@ -58,8 +70,8 @@ export function Layout({ children, userName = 'Usuário', onLogout }: LayoutProp
                 onClick={closeSidebar}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-colors ${
                   isActive
-                    ? 'bg-[#A5D6A7] text-[#2E7D32]'
-                    : 'text-[#424242] hover:bg-[#F5F5F5]'
+                    ? "bg-[#A5D6A7] text-[#2E7D32]"
+                    : "text-[#424242] hover:bg-[#F5F5F5]"
                 }`}
               >
                 <Icon size={20} />
@@ -82,7 +94,9 @@ export function Layout({ children, userName = 'Usuário', onLogout }: LayoutProp
           </button>
           <div className="flex-1 lg:flex-none"></div>
           <div className="flex items-center gap-4">
-            <span className="text-[#424242] text-sm lg:text-base">{userName}</span>
+            <span className="text-[#424242] text-sm lg:text-base">
+              {userName}
+            </span>
             <button
               onClick={onLogout}
               className="flex items-center gap-2 px-3 py-2 lg:px-4 rounded-lg bg-[#F5F5F5] hover:bg-gray-200 transition-colors text-[#424242]"
@@ -94,9 +108,7 @@ export function Layout({ children, userName = 'Usuário', onLogout }: LayoutProp
         </header>
 
         {/* Page Content */}
-        <main className="p-4 lg:p-6">
-          {children}
-        </main>
+        <main className="p-4 lg:p-6">{children}</main>
 
         {/* Footer */}
         <footer className="text-center p-4 text-[#424242] text-sm border-t border-gray-200 bg-white">
