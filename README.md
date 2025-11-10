@@ -8,6 +8,8 @@ Sistema de gerenciamento de doações de alimentos, conectando doadores e instit
 - Cadastro e gerenciamento de instituições beneficentes
 - Registro e acompanhamento de doações
 - Controle de status das doações
+- **Estatísticas e relatórios avançados** ✨ NEW
+- **Views, Stored Procedures e Triggers** ✨ NEW
 - Documentação completa da API com Swagger
 
 ## 🛠 Tecnologias Utilizadas
@@ -19,6 +21,7 @@ Sistema de gerenciamento de doações de alimentos, conectando doadores e instit
   - PostgreSQL
   - Drizzle ORM
   - Swagger/OpenAPI
+  - SQL Avançado (Views, Procedures, Triggers)
 
 - **Frontend:**
   - React
@@ -86,7 +89,11 @@ pnpm run dev
 ```
 
 3. Acesse a documentação da API:
+
    - http://localhost:3000/api
+
+4. Acesse o frontend:
+   - http://localhost:5173
 
 ## 📚 Documentação da API
 
@@ -99,6 +106,7 @@ http://localhost:3000/api
 
 - `GET /donors` - Lista todos os doadores
 - `POST /donors` - Cadastra um novo doador
+- `PUT /donors/:id` - Atualiza um doador
 
 #### Instituições
 
@@ -108,11 +116,96 @@ http://localhost:3000/api
 #### Doações
 
 - `GET /donations` - Lista todas as doações
-- `GET /donations/donor/:id` - Lista doações por doador
-- `GET /donations/institution/:id` - Lista doações por instituição
 - `POST /donations` - Registra uma nova doação
-- `PATCH /donations/:id` - Atualiza o status de uma doação
-- `DELETE /donations/:id` - Remove uma doação
+
+#### 📊 Estatísticas (NEW!)
+
+- `GET /statistics/top-foods-month` - Alimentos mais doados no mês
+- `GET /statistics/inventory-by-lot` - Estoque por lote com data de validade
+- `GET /statistics/distribution-by-institution` - Distribuição por instituição
+- `GET /statistics/top-donors` - Doadores mais ativos
+- `GET /statistics/expiring-items` - Alimentos próximos ao vencimento
+- `GET /statistics/monthly-summary` - Resumo mensal (últimos 12 meses)
+- `GET /statistics/inventory-report` - Relatório de estoque
+- `GET /statistics/distribution-efficiency` - Eficiência de distribuição
+
+## 📊 Banco de Dados - 2ª Entrega
+
+Este projeto inclui implementação completa dos requisitos de Banco de Dados:
+
+### ✅ Requisitos Implementados
+
+1. **Modelo Físico & Scripts DDL**
+
+   - Tabelas com constraints, índices e foreign keys
+   - Arquivo: `backend/drizzle/migrations/001_init.sql`
+
+2. **Views** (4 implementadas)
+
+   - v_estoque_por_validade
+   - v_doacoes_por_periodo
+   - v_alimentos_mais_doados
+   - v_distribuicao_por_instituicao
+
+3. **Stored Procedures/Functions** (2 implementadas)
+
+   - registrar_doacao()
+   - retirar_doacao()
+
+4. **Triggers** (2 implementados)
+
+   - validate_donation()
+   - audit_donation_changes()
+
+5. **Scripts DML de Teste**
+
+   - 5 doadores, 4 instituições, 20+ doações
+
+6. **Consultas SQL de Negócio** (10 implementadas)
+   - Alimentos mais doados, saldo por lote, distribuição por instituição
+   - Doadores mais ativos, itens próximos ao vencimento
+   - E mais 5 consultas de análise...
+
+### 📁 Arquivos de Banco de Dados
+
+```
+backend/
+├── drizzle/
+│   ├── migrations/
+│   │   ├── 001_init.sql                              (Tabelas)
+│   │   ├── 002_views_procedures_triggers.sql         (DDL Avançado)
+│   │   └── 003_test_data.sql                         (Dados Teste)
+│   ├── consultas-negocio.sql                         (10 Queries)
+│   └── TESTE_BANCO_DADOS.sql                         (Guia de Testes)
+├── src/statistics/
+│   ├── statistics.controller.ts                      (8 Endpoints)
+│   ├── statistics.service.ts                         (Lógica SQL)
+│   └── statistics.module.ts                          (Módulo NestJS)
+└── DATABASE_REQUIREMENTS.md                          (Documentação)
+```
+
+### 🎯 Como Usar
+
+```bash
+# Executar migrações
+cd backend
+pnpm run db:migrate
+
+# Iniciar backend
+pnpm run start:dev
+
+# Acessar endpoints
+curl http://localhost:3000/statistics/top-foods-month
+
+# Ver documentação Swagger
+http://localhost:3000/api
+```
+
+### 📖 Documentação Detalhada
+
+- [Resumo Executivo](./RESUMO_EXECUTIVO.md)
+- [Implementação de Banco de Dados](./IMPLEMENTACAO_BANCO_DADOS.md)
+- [Requisitos de Banco de Dados](./backend/DATABASE_REQUIREMENTS.md)
 
 ## 🤝 Contribuindo
 
