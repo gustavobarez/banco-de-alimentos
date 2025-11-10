@@ -5,7 +5,7 @@ import { Label } from './ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { User, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { donorsService, type Donor } from '../services/donors.service'
+import { donorsService, type Donor } from '../services/donors.service';
 
 export function Doadores() {
   const [doadores, setDoadores] = useState<Donor[]>([]);

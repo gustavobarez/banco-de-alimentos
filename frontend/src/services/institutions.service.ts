@@ -1,4 +1,5 @@
 const API_BASE_URL = 'http://localhost:3000'; 
+
 export interface Institution {
   id: number;
   name: string;

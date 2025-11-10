@@ -119,6 +119,7 @@ export class InstitutionsService {
     }
   }
 
+  // Deletar instituição
   async delete(id: number) {
     try {
       await this.findOne(id);
@@ -136,6 +137,7 @@ export class InstitutionsService {
     }
   }
 
+  // Buscar por CNPJ
   async findByCnpj(cnpj: string) {
     try {
       const result = await db
@@ -150,6 +152,7 @@ export class InstitutionsService {
     }
   }
 
+  // Buscar por Email
   async findByEmail(email: string) {
     try {
       const result = await db

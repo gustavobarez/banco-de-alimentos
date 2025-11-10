@@ -19,7 +19,7 @@ export interface CreateDonorDto {
 export const donorsService = {
   async getAll(): Promise<Donor[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/donors/`);
+      const response = await fetch(`${API_BASE_URL}/donors/findAllDonnors`);
       
       if (!response.ok) {
         throw new Error('Erro ao buscar doadores');
@@ -34,7 +34,7 @@ export const donorsService = {
 
   async create(donor: CreateDonorDto): Promise<Donor> {
     try {
-      const response = await fetch(`${API_BASE_URL}/donors/`, {
+      const response = await fetch(`${API_BASE_URL}/donors/createDonnor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
